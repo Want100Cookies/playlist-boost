@@ -1,0 +1,7 @@
+{
+  "name": "Playlist Boost",
+  "short_name": "Playlist Boost",
+  "description": "A collaborative Spotify playlist manager",
+  "start_url": "/",
+  "display": "standalone"
+}
