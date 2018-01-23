@@ -1,13 +1,53 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
+
+<link rel="import" href="./boost-login.html">
+
+
 <dom-module id="boost-app">
   <template>
-    <style>
-      :host {
+    <style is="custom-styles">
+       :host {
         display: block;
+        @apply --paper-font-common;
+        height: 100vh;
+        background-color: var(--primary-background-color);        
+      }
+
+      app-toolbar [main-title] {
+        @apply --paper-font-headline;
+      }
+
+      app-header {
+        color: var(--paper-green-50);
+        background: var(--paper-green-700);
+      }
+
+      div#content {
+        padding-top: 10px;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+
+    <app-header-layout>
+      <app-header fixed condenses effects="waterfall" slot="header">
+        <app-toolbar>
+          <div main-title>Playlist Boost</div>
+        </app-toolbar>
+      </app-header>
+
+      <boost-login
+        on-sign-in="signIn"
+        signed-in="[[false]]"
+        disabled="[[false]]">
+      </boost-login>
+    </app-header-layout>
   </template>
 
   <script>
@@ -16,15 +56,17 @@
      * @polymer
      */
     class BoostApp extends Polymer.Element {
-      static get is() { return 'boost-app'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'boost-app'
-          }
-        };
+      static get is() {
+        return 'boost-app';
       }
+      // static get properties() {
+      //   return {
+      //     prop1: {
+      //       type: String,
+      //       value: 'boost-app'
+      //     }
+      //   };
+      // }
     }
 
     window.customElements.define(BoostApp.is, BoostApp);

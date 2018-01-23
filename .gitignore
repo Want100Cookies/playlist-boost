@@ -12,3 +12,5 @@ bower_components
 bower_components/
 
 # End of https://www.gitignore.io/api/bower,polymer
+
+build/
