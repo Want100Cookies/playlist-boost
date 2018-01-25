@@ -8,10 +8,11 @@
 
 <link rel="import" href="../../bower_components/app-layout/app-layout.html">
 
-<link rel="import" href="./boost-login.html">
-
 <link rel="import" href="../../bower_components/feathersjs-client/feathersjs-client.html">
 
+<link rel="import" href="./boost-login.html">
+<link rel="import" href="./boost-toolbar.html">
+<link rel="import" href="./boost-feathers-auth.html">
 
 <dom-module id="boost-app">
   <template>
@@ -23,33 +24,23 @@
         background-color: var(--primary-background-color);
       }
 
-      app-toolbar [main-title] {
-        @apply --paper-font-headline;
-      }
-
-      app-header {
-        color: var(--paper-green-50);
-        background: var(--paper-green-700);
-      }
-
       div#content {
         padding-top: 10px;
       }
 
     </style>
 
-    <feathersjs-client app="{{app}}" server="http://localhost:3030" connected="{{connected}}"></feathersjs-client>
+    <feathersjs-client app="{{feathersApp}}" server="http://localhost:3030" connected="{{connected}}"></feathersjs-client>
+    <boost-feathers-auth app="[[feathersApp]]" connected="[[connected]]" logged-in="{{loggedIn}}"></boost-feathers-auth>
 
     <app-header-layout>
-      <app-header fixed condenses effects="waterfall" slot="header">
-        <app-toolbar>
-          <div main-title>Playlist Boost</div>
-        </app-toolbar>
+      <app-header fixed slot="header">
+        <boost-toolbar signed-in="[[loggedIn]]" on-sign-out="signOut"></boost-toolbar>
       </app-header>
 
-      <boost-login on-sign-in="signIn" signed-in="[[signedIn]]" disabled="[[!connected]]">
-      </boost-login>
-    </app-header-layout>
+      </app-layout>
+
+      <boost-login on-sign-in="signIn" logged-in="[[loggedIn]]" disabled="[[!connected]]"></boost-login>
   </template>
 
   <script>
@@ -62,61 +53,15 @@
         return 'boost-app';
       }
 
-      ready() {
-        super.ready();
-
-        this._createPropertyObserver('app', '_connectedChanged');
-
-        this.signedIn = false;
-      }
-
-      _connectedChanged() {
-        if (this.app && this.connected) {
-          this._configFeathers();
-        }
-      }
-
-      _configFeathers() {
-        const authConfig = {
-          header: 'Authorization',
-          path: '/authentication',
-          jwtStrategy: 'jwt',
-          entity: 'user',
-          service: 'users',
-          cookie: 'feathers-jwt',
-          storageKey: 'feathers-jwt',
-          storage: window.localStorage
-        };
-
-        this.app.configure(feathers.authentication(authConfig));
-
-        this.app.on('reauthentication-error', this._feathersAuthErrorHandler);
-
-        this.app
-          .authenticate()
-          .then((success) => {
-            this.signedIn = true;
-          })
-          .catch((error) => {
-            this.signedIn = false;
-          })
-      }
-
-      _feathersAuthErrorHandler(error) {
-        console.error("Reauth error: ", error);
-      }
-
       signIn() {
         window.location = "http://localhost:3030/auth/spotify";
       }
-      // static get properties() {
-      //   return {
-      //     prop1: {
-      //       type: String,
-      //       value: 'boost-app'
-      //     }
-      //   };
-      // }
+
+      signOut() {
+        this.feathersApp.logout().then(() => {
+          this.loggedIn = false;
+        });
+      }
     }
 
     window.customElements.define(BoostApp.is, BoostApp);

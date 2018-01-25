@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="boost-feathers-auth">
+  <script>
+    class BoostFeathersAuth extends Polymer.Element {
+      static get is() {
+        return 'boost-feathers-auth';
+      }
+
+      static get properties() {
+        return {
+          app: {
+            type: Object,
+            observer: '_connectedChanged',
+          },
+          connected: {
+            type: Boolean,
+            observer: '_connectedChanged',
+          },
+          loggedIn: {
+            type: Boolean,
+            value: false,
+            readOnly: true,
+            notify: true,
+          }
+        };
+      }
+
+      _connectedChanged() {
+        if (this.app && this.connected) {
+          console.log("boost-feathers-auth Init Feathers Config");
+          this._configFeathers();
+        }
+      }
+
+      _configFeathers() {
+        const authConfig = {
+          header: 'Authorization',
+          path: '/authentication',
+          jwtStrategy: 'jwt',
+          entity: 'user',
+          service: 'users',
+          cookie: 'feathers-jwt',
+          storageKey: 'feathers-jwt',
+          storage: window.localStorage
+        };
+
+        this.app.configure(feathers.authentication(authConfig));
+
+        this.app.on('reauthentication-error', this._feathersAuthErrorHandler);
+
+        this.app
+          .authenticate()
+          .then((success) => {
+            this._setLoggedIn(true);
+            console.log("boost-feathers-auth Logged in");
+          })
+          .catch((error) => {
+            this._setLoggedIn(false);
+            console.log("boost-feathers-auth Not logged in");
+          })
+      }
+
+      _feathersAuthErrorHandler(error) {
+        this._setLoggedIn(false);
+        console.error("boost-feathers-auth Reauth error: ", error);
+      }
+    }
+
+    window.customElements.define(BoostFeathersAuth.is, BoostFeathersAuth);
+
+  </script>
+</dom-module>
