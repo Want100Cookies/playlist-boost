@@ -1,0 +1,16 @@
+
+# Created by https://www.gitignore.io/api/bower,polymer
+
+### Bower ###
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
+
+### Polymer ###
+#Installed components via bower
+bower_components/
+
+# End of https://www.gitignore.io/api/bower,polymer
+
+build/

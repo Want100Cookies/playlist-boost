@@ -1,33 +1,57 @@
-# \<Playlist Boost\>
+# playlist-boost-server
 
-A collaborative Spotify playlist manager
+> A collaborative Spotify playlist manager
 
-## Install the Polymer-CLI
+## About
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
+This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
 
-## Viewing Your Application
+## Getting Started
+
+Getting up and running is as easy as 1, 2, 3.
+
+1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
+2. Install your dependencies
+
+    ```
+    cd path/to/playlist-boost-server; npm install
+    ```
+
+3. Start your app
+
+    ```
+    npm start
+    ```
+
+## Testing
+
+Simply run `npm test` and all your tests in the `test/` directory will be run.
+
+## Scaffolding
+
+Feathers has a powerful command line interface. Here are a few things it can do:
 
 ```
-$ polymer serve
+$ npm install -g @feathersjs/cli          # Install Feathers CLI
+
+$ feathers generate service               # Generate a new Service
+$ feathers generate hook                  # Generate a new Hook
+$ feathers generate model                 # Generate a new Model
+$ feathers help                           # Show all commands
 ```
 
-## Building Your Application
+## Help
 
-```
-$ polymer build
-```
+For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
 
-This will create builds of your application in the `build/` directory, optimized to be served in production. You can then serve the built versions by giving `polymer serve` a folder to serve from:
+## Changelog
 
-```
-$ polymer serve build/default
-```
+__0.1.0__
 
-## Running Tests
+- Initial release
 
-```
-$ polymer test
-```
+## License
 
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Copyright (c) 2016
+
+Licensed under the [MIT license](LICENSE).

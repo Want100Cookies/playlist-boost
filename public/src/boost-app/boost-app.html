@@ -10,6 +10,8 @@
 
 <link rel="import" href="./boost-login.html">
 
+<link rel="import" href="../../bower_components/feathersjs-client/feathersjs-client.html">
+
 
 <dom-module id="boost-app">
   <template>
@@ -18,7 +20,7 @@
         display: block;
         @apply --paper-font-common;
         height: 100vh;
-        background-color: var(--primary-background-color);        
+        background-color: var(--primary-background-color);
       }
 
       app-toolbar [main-title] {
@@ -33,7 +35,10 @@
       div#content {
         padding-top: 10px;
       }
+
     </style>
+
+    <feathersjs-client app="{{app}}" server="http://localhost:3030" connected="{{connected}}"></feathersjs-client>
 
     <app-header-layout>
       <app-header fixed condenses effects="waterfall" slot="header">
@@ -42,10 +47,7 @@
         </app-toolbar>
       </app-header>
 
-      <boost-login
-        on-sign-in="signIn"
-        signed-in="[[false]]"
-        disabled="[[false]]">
+      <boost-login on-sign-in="signIn" signed-in="[[signedIn]]" disabled="[[!connected]]">
       </boost-login>
     </app-header-layout>
   </template>
@@ -59,6 +61,54 @@
       static get is() {
         return 'boost-app';
       }
+
+      ready() {
+        super.ready();
+
+        this._createPropertyObserver('app', '_connectedChanged');
+
+        this.signedIn = false;
+      }
+
+      _connectedChanged() {
+        if (this.app && this.connected) {
+          this._configFeathers();
+        }
+      }
+
+      _configFeathers() {
+        const authConfig = {
+          header: 'Authorization',
+          path: '/authentication',
+          jwtStrategy: 'jwt',
+          entity: 'user',
+          service: 'users',
+          cookie: 'feathers-jwt',
+          storageKey: 'feathers-jwt',
+          storage: window.localStorage
+        };
+
+        this.app.configure(feathers.authentication(authConfig));
+
+        this.app.on('reauthentication-error', this._feathersAuthErrorHandler);
+
+        this.app
+          .authenticate()
+          .then((success) => {
+            this.signedIn = true;
+          })
+          .catch((error) => {
+            this.signedIn = false;
+          })
+      }
+
+      _feathersAuthErrorHandler(error) {
+        console.error("Reauth error: ", error);
+      }
+
+      signIn() {
+        window.location = "http://localhost:3030/auth/spotify";
+      }
       // static get properties() {
       //   return {
       //     prop1: {
@@ -70,5 +120,6 @@
     }
 
     window.customElements.define(BoostApp.is, BoostApp);
+
   </script>
 </dom-module>

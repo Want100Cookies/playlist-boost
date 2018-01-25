@@ -1,0 +1,42 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "nedb": "../data",
+  "authentication": {
+    "secret": "c5b66827dc19e8fda82c3f4b89010821135bcea151070e8555b5050277f23495ab2831df38185e2e3a2407afcf4ab15702712121f436706bbfdc2b259ffc12d38b108984998c584f66c6ccf39b3b78b18051b5cbf2061b5af6ede1baeefe8b1c58bfdfcf6b0cd472a22bf8154ebf4b5706346b9da185d63ccd08b6bd1ee31a1411fcec7627f5e60595b2b50b19388eb0892580496233f375f47ff849c5fbaee6f56a706f48b86a5654fd65dcf3b84ed664a9da601a3dd6a488d7392bf1d214f51316390ae7ebe523f4acddfd90632052acc41f882440489f9851d4ad00af572717612429c6d452c8fa867fe901609ad6e8fde3c098bd2995ca031752f0cd09eb",
+    "strategies": [
+      "spotify",
+      "jwt"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://localhost:3030",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "spotify": {
+      "clientID": "fdce36d031c04c66befe12d042316394",
+      "clientSecret": "fcde94322e7e46bc9fe7ec151868c5f1",
+      "callbackURL": "http://localhost:3030/auth/spotify/callback",
+      "successRedirect": "/",
+      "scope": ["user-read-email", "user-read-private"]
+    },
+    "cookie": {
+      "enabled": true,
+      "name": "feathers-jwt",
+      "httpOnly": false,
+      "secure": false
+    }
+  }
+}
