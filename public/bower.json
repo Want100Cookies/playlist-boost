@@ -11,7 +11,9 @@
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.1",
     "paper-button": "PolymerElements/paper-button#^2.0.0",
     "feathersjs-client": "https://github.com/Want100Cookies/feathersjs-client.git#master",
-    "app-storage": "PolymerElements/app-storage#^2.0.2"
+    "app-storage": "PolymerElements/app-storage#^2.0.2",
+    "iron-list": "PolymerElements/iron-list#^2.0.12",
+    "paper-card": "PolymerElements/paper-card#^2.0.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

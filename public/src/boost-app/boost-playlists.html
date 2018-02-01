@@ -1,0 +1,99 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html">
+
+
+<dom-module id="boost-playlists">
+  <template>
+    <style is="custom-styles">
+      :host {
+        display: block;
+        @apply --paper-font-common;
+      }
+
+      body {
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      iron-list {
+        /* add padding since the app-toolbar is fixed at the top */
+        padding-top: 50px;
+      }
+
+      paper-card {
+        --paper-card-header-image: {
+          height: 250px;
+        };
+
+        --paper-card-header-color: var(--paper-grey-600);
+      }
+
+      .playlist {
+        margin: 1rem;
+      }
+
+      .playlist-header {
+        @apply --paper-font-headline;
+      }
+
+      .playlist-artists {
+        color: var(--paper-grey-600);
+        margin: 10px 0;
+      }
+    </style>
+
+    <iron-list items="[[data]]" as="playlist" grid>
+      <template>
+        <div>
+          <paper-card class="playlist" image="http://via.placeholder.com/100x100" heading="Playlist">
+            <div class="card-content">
+              <div class="playlist-header">[[playlist.name]]</div>
+              <div class="playlist-artists">Some artists</div>
+              <div>Song count/time | Some users who contributed</div>
+            </div>
+
+            <div class="card-actions">
+              <paper-icon-button class="view-icon" icon="zoom-in"></paper-icon-button>
+            </div>
+          </paper-card>
+        </div>
+      </template>
+    </iron-list>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class BoostPlaylists extends Polymer.Element {
+      static get is() {
+        return 'boost-playlists';
+      }
+
+      ready() {
+        this.data = [
+          {"name": "Playlist 1"},
+          {"name": "Playlist 2"},
+          {"name": "Playlist 3"},
+          {"name": "Playlist 4"},
+        ];
+        super.ready();
+      }
+    }
+
+    window.customElements.define(BoostPlaylists.is, BoostPlaylists);
+
+  </script>
+</dom-module>

@@ -13,11 +13,12 @@
 <link rel="import" href="./boost-login.html">
 <link rel="import" href="./boost-toolbar.html">
 <link rel="import" href="./boost-feathers-auth.html">
+<link rel="import" href="./boost-playlists.html">
 
 <dom-module id="boost-app">
   <template>
     <style is="custom-styles">
-       :host {
+      :host {
         display: block;
         @apply --paper-font-common;
         height: 100vh;
@@ -30,7 +31,8 @@
 
     </style>
 
-    <feathersjs-client app="{{feathersApp}}" server="http://localhost:3030" connected="{{connected}}"></feathersjs-client>
+    <feathersjs-client app="{{feathersApp}}" server="http://localhost:3030"
+                       connected="{{connected}}"></feathersjs-client>
     <boost-feathers-auth app="[[feathersApp]]" connected="[[connected]]" logged-in="{{loggedIn}}"></boost-feathers-auth>
 
     <app-header-layout>
@@ -38,9 +40,11 @@
         <boost-toolbar signed-in="[[loggedIn]]" on-sign-out="signOut"></boost-toolbar>
       </app-header>
 
-      </app-layout>
+    </app-header-layout>
 
-      <boost-login on-sign-in="signIn" logged-in="[[loggedIn]]" disabled="[[!connected]]"></boost-login>
+    <boost-login on-sign-in="signIn" logged-in="[[loggedIn]]" disabled="[[!connected]]"></boost-login>
+
+    <boost-playlists></boost-playlists>
   </template>
 
   <script>
