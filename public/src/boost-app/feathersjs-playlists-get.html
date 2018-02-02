@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="feathersjs-playlist-get">
+  <script>
+    class FeathersjsPlaylistsGet extends Polymer.Element {
+      static get is() {
+        return 'feathersjs-playlist-get';
+      }
+
+      static get properties() {
+        return {
+          app: {
+            type: Object,
+            observer: '_connectedChanged',
+          },
+          loggedIn: {
+            type: Boolean,
+            observer: '_connectedChanged',
+          },
+          playlists: {
+            type: Array,
+            value: [],
+            readOnly: true,
+            notify: true,
+          }
+        };
+      }
+
+      _connectedChanged() {
+        if (this.app && this.loggedIn) {
+          console.log("ffeathersjs-playlist-get Init Feathers Playlists Get");
+          this._getPlaylists();
+        }
+      }
+
+      _getPlaylists() {
+        this._setPlaylists([
+          {"name": "Foo Playlist"}
+        ]);
+      }
+    }
+
+    window.customElements.define(FeathersjsPlaylistsGet.is, FeathersjsPlaylistsGet);
+
+  </script>
+</dom-module>

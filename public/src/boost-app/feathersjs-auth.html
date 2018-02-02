@@ -1,10 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
-<dom-module id="boost-feathers-auth">
+<dom-module id="feathersjs-auth">
   <script>
-    class BoostFeathersAuth extends Polymer.Element {
+    class FeathersjsAuth extends Polymer.Element {
       static get is() {
-        return 'boost-feathers-auth';
+        return 'feathersjs-auth';
       }
 
       static get properties() {
@@ -28,7 +28,7 @@
 
       _connectedChanged() {
         if (this.app && this.connected) {
-          console.log("boost-feathers-auth Init Feathers Config");
+          console.log("feathersjs-auth Init Feathers Config");
           this._configFeathers();
         }
       }
@@ -52,22 +52,22 @@
         this.app
           .authenticate()
           .then((success) => {
+            console.log("feathersjs-auth Logged in");
             this._setLoggedIn(true);
-            console.log("boost-feathers-auth Logged in");
           })
           .catch((error) => {
+            console.log("feathersjs-auth Not logged in");
             this._setLoggedIn(false);
-            console.log("boost-feathers-auth Not logged in");
           })
       }
 
       _feathersAuthErrorHandler(error) {
+        console.error("feathersjs-auth Reauth error: ", error);
         this._setLoggedIn(false);
-        console.error("boost-feathers-auth Reauth error: ", error);
       }
     }
 
-    window.customElements.define(BoostFeathersAuth.is, BoostFeathersAuth);
+    window.customElements.define(FeathersjsAuth.is, FeathersjsAuth);
 
   </script>
 </dom-module>

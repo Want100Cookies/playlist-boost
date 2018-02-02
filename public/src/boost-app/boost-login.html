@@ -8,7 +8,7 @@
 <dom-module id="boost-login">
   <template>
     <style>
-       :host {
+      :host {
         position: absolute;
         top: 0;
         left: 0;
@@ -24,12 +24,12 @@
         @apply --layout-center-center;
       }
 
-       :host([logged-in]) {
+      :host([logged-in]) {
         opacity: 0;
         pointer-events: none;
       }
 
-      paper-button>* {
+      paper-button > * {
         vertical-align: middle;
         text-transform: none;
       }

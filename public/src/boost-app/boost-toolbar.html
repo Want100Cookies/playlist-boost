@@ -50,7 +50,8 @@
       <div main-title>Playlist Boost</div>
 
       <iron-icon icon="[[_computeCloudIcon(online)]]"></iron-icon>
-      <paper-icon-button icon="[[_computeLockIcon(signedIn)]]" disabled="[[!signedIn]]" on-tap="lock"></paper-icon-button>
+      <paper-icon-button icon="[[_computeLockIcon(loggedIn)]]" disabled="[[!loggedIn]]"
+                         on-tap="lock"></paper-icon-button>
     </app-toolbar>
   </template>
   <script>
@@ -61,7 +62,7 @@
 
       static get properties() {
         return {
-          signedIn: {
+          loggedIn: {
             type: Boolean,
             notify: true,
             value: false
@@ -69,8 +70,8 @@
         };
       }
 
-      _computeLockIcon(signedIn) {
-        return signedIn ? 'lock-open' : 'lock';
+      _computeLockIcon(loggedIn) {
+        return loggedIn ? 'lock-open' : 'lock';
       };
 
       _computeCloudIcon(online) {
