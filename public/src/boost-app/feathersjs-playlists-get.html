@@ -29,15 +29,46 @@
       _connectedChanged() {
         if (this.app && this.loggedIn) {
           console.log("ffeathersjs-playlist-get Init Feathers Playlists Get");
-          this._getPlaylists();
+
+          let service = this.app.service('playlists');
+
+          this._getPlaylists(service);
+
+          service.on('created', (playlist) => this._onCreated(playlist));
+          service.on('updated', (playlist) => this._onUpdated(playlist));
+          service.on('removed', (playlist) => this._onRemoved(playlist));
         }
       }
 
-      _getPlaylists() {
-        this._setPlaylists([
-          {"name": "Foo Playlist"}
-        ]);
+      _getPlaylists(service) {
+        service.find().then((response) => {
+          this._setPlaylists(response.data);
+        });
       }
+
+      _onCreated(playlist) {
+        console.log("On create", playlist);
+
+        this._setPlaylists(this.playlists.concat(playlist));
+      }
+
+      _onUpdated(updatedPlaylist) {
+        console.log("On update", updatedPlaylist);
+
+        this._setPlaylists(this.playlists.map((playlist) => {
+          return playlist._id === updatedPlaylist._id ?
+            updatedPlaylist : playlist;
+        }));
+      }
+
+      _onRemoved(deletedPlaylist) {
+        console.log("On delete", deletedPlaylist);
+
+        this._setPlaylists(this.playlists.filter((playlist) => {
+          return playlist._id !== deletedPlaylist._id;
+        }));
+      }
+
     }
 
     window.customElements.define(FeathersjsPlaylistsGet.is, FeathersjsPlaylistsGet);

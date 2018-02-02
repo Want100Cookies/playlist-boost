@@ -6,10 +6,14 @@
 <link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
 <link rel="import" href="../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../bower_components/paper-styles/default-theme.html">
 
 <link rel="import" href="./feathersjs-playlists-get.html">
+
+<link rel="import" href="./boost-editor.html">
 
 <dom-module id="boost-playlists">
   <template>
@@ -24,6 +28,10 @@
 
       :host([logged-in]) {
         display: block;
+      }
+
+      .clickable {
+        cursor: pointer;
       }
 
       paper-card {
@@ -42,23 +50,34 @@
         color: var(--paper-grey-600);
         margin: 10px 0;
       }
+
+      paper-fab {
+        position: fixed;
+        bottom: 1em;
+        right: 1em;
+      }
     </style>
 
     <feathersjs-playlist-get app="[[app]]" logged-in="[[loggedIn]]" playlists="{{playlists}}"></feathersjs-playlist-get>
 
     <template is="dom-repeat" items="{{playlists}}">
-      <paper-card class="playlist" image="http://via.placeholder.com/100x100" heading="Playlist">
+      <paper-card id$="[[item._id]]" class="playlist clickable" image="http://via.placeholder.com/100x100"
+                  heading="Party playlist" on-click="edit">
         <div class="card-content">
-          <div class="playlist-header">[[item.name]]</div>
+          <div class="playlist-header">[[item.title]]</div>
           <div class="playlist-artists">Some artists</div>
           <div>Song count/time | Some users who contributed</div>
         </div>
-
-        <div class="card-actions">
-          <paper-icon-button class="view-icon" icon="zoom-in"></paper-icon-button>
-        </div>
       </paper-card>
     </template>
+
+    <paper-fab
+      icon="add"
+      on-tap="create"
+      aria-label="Add playlist">
+    </paper-fab>
+
+    <boost-editor id="editor" on-close="commitChange" playlist="{{editablePlaylist}}"></boost-editor>
 
   </template>
 
@@ -82,7 +101,40 @@
           app: {
             type: Object,
           },
+          isFullScreen: {
+            type: Boolean,
+            notify: true,
+          }
         }
+      }
+
+      create() {
+        this.isFullScreen = true;
+        this.$.editor.open();
+      }
+
+      edit(event) {
+        this.isFullScreen = true;
+        let playlistElement = Polymer.dom(event).localTarget;
+        this.editablePlaylist = this.playlists.filter((playlist) => playlist._id === playlistElement.id)[0];
+        this.$.editor.open(playlistElement);
+      }
+
+      commitChange(event) {
+        this.isFullScreen = false;
+        let playlistService = this.app.service('playlists');
+
+        if (event.detail === "save" && this.editablePlaylist.title) {
+          if (this.editablePlaylist._id) {
+            playlistService.update(this.editablePlaylist._id, this.editablePlaylist);
+          } else {
+            playlistService.create(this.editablePlaylist);
+          }
+        } else if (event.detail === "delete" && this.editablePlaylist._id) {
+          playlistService.remove(this.editablePlaylist._id);
+        }
+
+        this.editablePlaylist = null;
       }
     }
 

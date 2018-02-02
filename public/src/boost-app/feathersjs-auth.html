@@ -56,7 +56,7 @@
             this._setLoggedIn(true);
           })
           .catch((error) => {
-            console.log("feathersjs-auth Not logged in");
+            console.log("feathersjs-auth Not logged in", error);
             this._setLoggedIn(false);
           })
       }

@@ -13,7 +13,9 @@
     "feathersjs-client": "https://github.com/Want100Cookies/feathersjs-client.git#master",
     "app-storage": "PolymerElements/app-storage#^2.0.2",
     "iron-list": "PolymerElements/iron-list#^2.0.12",
-    "paper-card": "PolymerElements/paper-card#^2.0.0"
+    "paper-card": "PolymerElements/paper-card#^2.0.0",
+    "paper-fab": "PolymerElements/paper-fab#^2.0.0",
+    "iron-input": "PolymerElements/iron-input#^2.0.1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

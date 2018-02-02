@@ -1,0 +1,103 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/iron-input/iron-input.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html">
+
+<dom-module id="boost-shared-playlist">
+  <template>
+    <style is="custom-styles">
+      :host {
+        display: block;
+        box-sizing: border-box;
+        background-color: #fafafa;
+        color: #212121;
+        padding: 1em;
+        @apply --paper-font-common-base;
+        @apply --shadow-elevation-2dp;
+        border-radius: 2px;
+        --iron-autogrow-textarea: {
+          margin: 0;
+          padding: 0;
+          font-family: 'Roboto Slab', Times New Roman, serif;
+          white-space: pre-wrap;
+        }
+      }
+
+      h1 {
+        font-size: 1.15em;
+        margin: 0;
+        white-space: pre-wrap;
+      }
+
+      h1:not(.hidden) + p {
+        margin-top: 1em;
+      }
+
+      p {
+        margin: 0;
+        font-family: 'Roboto Slab', Times New Roman, serif;
+        font-size: 0.9em;
+        white-space: pre-wrap;
+      }
+
+      .placeholder:after {
+        content: 'Tap to edit';
+        opacity: 0.5;
+      }
+
+      iron-input {
+        width: 100%;
+      }
+
+      input {
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0;
+        outline: none;
+        border: 0;
+        background: transparent;
+        white-space: pre-wrap;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-size: 1.15em;
+        font-weight: bold;
+        color: #212121;
+      }
+    </style>
+
+    <iron-input bind-value="{{title}}">
+      <input is="iron-input"
+             placeholder="Title"
+             bind-value="{{title}}"/>
+    </iron-input>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class BoostSharedPlaylist extends Polymer.Element {
+      static get is() {
+        return 'boost-shared-playlist';
+      }
+
+      static get properties() {
+        return {
+          title: {
+            type: String,
+            notify: true,
+            value: ''
+          },
+        }
+      }
+    }
+
+    window.customElements.define(BoostSharedPlaylist.is, BoostSharedPlaylist);
+
+  </script>
+</dom-module>

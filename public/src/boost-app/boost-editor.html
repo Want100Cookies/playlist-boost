@@ -1,0 +1,214 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/paper-styles/default-theme.html">
+
+<link rel="import" href="./boost-shared-playlist.html">
+
+<dom-module id="boost-editor">
+  <template>
+    <style is="custom-styles">
+      :host {
+        display: none;
+        position: absolute;
+        overflow: hidden;
+        top: 76px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      :host([opened]) {
+        display: block;
+      }
+
+      :host(.open) {
+        background-color: var(--paper-green-a700);
+      }
+
+      paper-button {
+        color: var(--paper-green-50);
+      }
+
+      #background {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 512px;
+        width: 256px;
+        height: 256px;
+        background-color: var(--paper-green-a700);
+        transform-origin: 128px 128px;
+      }
+
+      boost-shared-playlist {
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 0;
+      }
+
+      :host(.open) boost-shared-playlist {
+        position: relative;
+        margin: auto;
+        width: calc(100vw - 20px);
+        max-width: 480px;
+      }
+
+      .controls {
+        display: block;
+        position: relative;
+        margin: 10px auto;
+        width: calc(100vw - 20px);
+        max-width: 480px;
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        justify-content: space-between;
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
+
+      :host(.open) .controls {
+        opacity: 1;
+      }
+    </style>
+
+    <div id="background"></div>
+
+    <boost-shared-playlist id="playlist" title="{{playlist.title}}"></boost-shared-playlist>
+
+    <div class="controls">
+      <paper-button on-tap="delete">Delete</paper-button>
+      <paper-button on-tap="save">Done</paper-button>
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class BoostEditor extends Polymer.Element {
+      static get is() {
+        return 'boost-editor';
+      }
+
+      static get properties() {
+        return {
+          playlist: {
+            type: Object,
+            notify: true
+          },
+          opened: {
+            type: Boolean,
+            reflectToAttribute: true,
+            readOnly: true,
+            value: false
+          },
+        }
+      }
+
+      open(noteElement) {
+        this._setOpened(true);
+        this.__editedNoteElement = noteElement;
+        if (noteElement) {
+          noteElement.style.opacity = 0;
+          this.transitionInFrom(noteElement.getBoundingClientRect());
+        } else {
+          this.create();
+        }
+      }
+
+      create() {
+        this._setOpened(true);
+        this.playlist = {title: ''};
+        this.transitionInFrom(this.getBoundingClientRect());
+      }
+
+      save() {
+        this.close('save');
+      }
+
+      delete() {
+        this.close('delete');
+      }
+
+      close(detail) {
+        if (this.__editedNoteElement) {
+          this.__editedNoteElement.style.opacity = 1;
+          this.__editedNoteElement = null;
+        }
+
+        this.dispatchEvent(new CustomEvent('close', {"bubles": true, "detail": detail}));
+
+        this.transitionOut().then(function () {
+          Polymer.dom(this).classList.remove('open');
+          this._setOpened(false);
+        }.bind(this));
+      }
+
+      transitionInFrom(rect) {
+        const targetRect = this.getBoundingClientRect();
+
+        const targetLeft = targetRect.width > 500 ?
+          targetRect.width / 2 - 240 : 10;
+
+        const targetWidth = targetRect.width > 500 ?
+          '480px' : 'calc(100vw - 20px)';
+
+        let noteAnimation = this.$.playlist.animate([{
+          transform: `translate(${rect.left}px,${rect.top - 46}px)`,
+          width: `${rect.width}px`,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          transform: `translate(${targetLeft}px, 0px)`,
+          width: targetWidth
+        }], 500);
+
+        this.$.background.animate([{
+          transform: `translate(${rect.left + rect.width / 2 - 128}px, ${rect.top - 46 + rect.height / 2 - 128}px) scale(0.1)`,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          transform: `scale(${targetRect.width / 256 * 4})`
+        }], 800);
+
+        noteAnimation.addEventListener('finish', function () {
+          Polymer.dom(this).classList.add('open');
+        }.bind(this));
+      }
+
+      transitionOut() {
+        let animation = this.animate([{
+          opacity: 1,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          opacity: 0
+        }], 300);
+
+        this.$.playlist.animate([{
+          transform: 'translateY(0) scale(1)',
+          opacity: 1,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        }, {
+          transform: 'translateY(10px) scale(0.9)',
+          opacity: 0
+        }], 500);
+
+        return new Promise(function (resolve) {
+          animation.addEventListener('finish', resolve);
+        }.bind(this));
+      }
+    }
+
+    window.customElements.define(BoostEditor.is, BoostEditor);
+
+  </script>
+</dom-module>

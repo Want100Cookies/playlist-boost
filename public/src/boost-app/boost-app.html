@@ -25,6 +25,10 @@
         background-color: var(--primary-background-color);
       }
 
+      :host([is-full-screen]) {
+        overflow: hidden;
+      }
+
       div#content {
         padding-top: 10px;
       }
@@ -48,7 +52,7 @@
 
     <boost-login on-sign-in="signIn" logged-in="[[loggedIn]]" disabled="[[!connected]]"></boost-login>
 
-    <boost-playlists app="[[feathersApp]]" logged-in="[[loggedIn]]"></boost-playlists>
+    <boost-playlists is-full-screen="{{isFullScreen}}" app="[[feathersApp]]" logged-in="[[loggedIn]]"></boost-playlists>
   </template>
 
   <script>
@@ -59,6 +63,17 @@
     class BoostApp extends Polymer.Element {
       static get is() {
         return 'boost-app';
+      }
+
+      static get properties() {
+        return {
+          isFullScreen: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            notify: true,
+          }
+        }
       }
 
       signIn() {
