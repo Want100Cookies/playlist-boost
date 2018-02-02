@@ -7,14 +7,14 @@ module.exports = {
     all: [],
     find: [ authenticate('jwt') ],
     get: [ authenticate('jwt') ],
-    create: [  ],
+    create: [],
     update: [  authenticate('jwt') ],
     patch: [  authenticate('jwt') ],
     remove: [ authenticate('jwt') ]
   },
 
   after: {
-    all: [ 
+    all: [
     ],
     find: [],
     get: [],

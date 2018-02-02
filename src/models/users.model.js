@@ -8,7 +8,7 @@ module.exports = function (app) {
     autoload: true
   });
 
-  Model.ensureIndex({ fieldName: 'email', unique: true });
+  Model.ensureIndex({fieldName: 'spotifyId', unique: true});
 
   return Model;
 };
